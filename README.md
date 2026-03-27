@@ -115,7 +115,6 @@ Open your browser and go to `http://localhost:3000` — you should see `Hello Wo
 
 ### Example values for `MONGODB_URI`
 
-- **MongoDB Atlas (cloud):** `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/todo-app`
 - **Local MongoDB:** `mongodb://localhost:27017/todo-app`
 - **Docker MongoDB:** `mongodb://localhost:27017/todo-app`
 
