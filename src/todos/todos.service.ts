@@ -26,14 +26,17 @@ export class TodosService {
   }
 
   async getAll(done?: boolean): Promise<TaskResponse[]> {
-    const filter = done !== undefined ? { done } : {};
-    const res = await this.todoModel.find(filter).sort({ createdAt: -1 });
+    const filter: Partial<Pick<Task, 'done'>> =
+      done !== undefined ? { done } : {};
+    const res: Task[] = await this.todoModel
+      .find(filter)
+      .sort({ createdAt: -1 });
 
     return res.map((task) => this.mapData(task));
   }
 
   async getCompletedGrouped(): Promise<Record<string, TaskResponse[]>> {
-    const tasks = await this.todoModel
+    const tasks: Task[] = await this.todoModel
       .find({ done: true })
       .sort({ completedAt: -1 });
     const grouped: Record<string, TaskResponse[]> = {};
@@ -52,7 +55,7 @@ export class TodosService {
   }
 
   async findById(id: string): Promise<TaskResponse> {
-    const res = await this.todoModel.findById(id);
+    const res: Task | null = await this.todoModel.findById(id);
     if (!res) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }
@@ -61,7 +64,7 @@ export class TodosService {
   }
 
   async create(todo: CreateTaskDto): Promise<TaskResponse> {
-    const created = await this.todoModel.create({
+    const created: Task = await this.todoModel.create({
       title: todo.title,
       done: false,
       createdAt: new Date(),
@@ -72,17 +75,20 @@ export class TodosService {
   }
 
   async updateById(id: string, todo: UpdateTaskDto): Promise<TaskResponse> {
-    const updateData: any = { done: todo.done };
+    let completedAt: Date | undefined;
 
     if (todo.done) {
-      updateData.completedAt = todo.completedAt
-        ? new Date(todo.completedAt)
-        : new Date();
+      completedAt = todo.completedAt ? new Date(todo.completedAt) : new Date();
     } else {
-      updateData.completedAt = null;
+      completedAt = undefined;
     }
+    
+    const updateData: Partial<Task> = {
+      done: todo.done,
+      completedAt,
+    };
 
-    const res = await this.todoModel.findByIdAndUpdate(id, updateData, {
+    const res: Task | null= await this.todoModel.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
     });
@@ -94,7 +100,7 @@ export class TodosService {
   }
 
   async deleteById(id: string): Promise<TaskResponse> {
-    const res = await this.todoModel.findByIdAndDelete(id);
+    const res: Task | null = await this.todoModel.findByIdAndDelete(id);
     if (!res) {
       throw new NotFoundException(`Task with id ${id} not found`);
     }

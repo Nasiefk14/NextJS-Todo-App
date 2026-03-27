@@ -23,8 +23,7 @@ export class TodosController {
 
   @Get()
   async getAllTodos(@Query('done') done?: string): Promise<TaskResponse[]> {
-    const isDone =
-      done === 'true' ? true : done === 'false' ? false : undefined;
+    const isDone: boolean | undefined = done === 'true' ? true : done === 'false' ? false : undefined;
 
     return this.todoService.getAll(isDone);
   }
@@ -40,11 +39,13 @@ export class TodosController {
   }
 
   @Post()
-  async createTodo(@Body() body: unknown): Promise<TaskResponse> {
+  async createTodo(@Body() body: any): Promise<TaskResponse> {
     try {
-      const parsed = CreateTaskSchema.parse(body);
+      const parsed: {
+        title: string;
+    } = CreateTaskSchema.parse(body);
       return this.todoService.create(parsed);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ZodError) {
         throw new BadRequestException(
           error.issues.map((err) => ({
@@ -63,9 +64,12 @@ export class TodosController {
     @Body() body: unknown,
   ): Promise<TaskResponse> {
     try {
-      const parsed = UpdateTaskSchema.parse(body);
+      const parsed: {
+        done: boolean;
+        completedAt?: Date | undefined;
+    } = UpdateTaskSchema.parse(body);
       return this.todoService.updateById(id, parsed);
-    } catch (error) {
+    } catch (error: any) {
       if (error instanceof ZodError) {
         throw new BadRequestException(
           error.issues.map((err) => ({
