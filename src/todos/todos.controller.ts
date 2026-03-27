@@ -1,0 +1,85 @@
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Patch,
+  Post,
+  Query,
+} from '@nestjs/common';
+import {
+  CreateTaskSchema,
+  TaskResponse,
+  UpdateTaskSchema,
+} from './schemas/todo.zod';
+import { TodosService } from './todos.service';
+import { ZodError } from 'zod';
+
+@Controller('api/tasks')
+export class TodosController {
+  constructor(private todoService: TodosService) {}
+
+  @Get()
+  async getAllTodos(@Query('done') done?: string): Promise<TaskResponse[]> {
+    const isDone =
+      done === 'true' ? true : done === 'false' ? false : undefined;
+
+    return this.todoService.getAll(isDone);
+  }
+
+  @Get('completed')
+  async getCompleted(): Promise<Record<string, TaskResponse[]>> {
+    return this.todoService.getCompletedGrouped();
+  }
+
+  @Get(':id')
+  async getTodoById(@Param('id') id: string): Promise<TaskResponse> {
+    return this.todoService.findById(id);
+  }
+
+  @Post()
+  async createTodo(@Body() body: unknown): Promise<TaskResponse> {
+    try {
+      const parsed = CreateTaskSchema.parse(body);
+      return this.todoService.create(parsed);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        throw new BadRequestException(
+          error.issues.map((err) => ({
+            field: err.path.join('.'),
+            message: err.message,
+          })),
+        );
+      }
+      throw error;
+    }
+  }
+
+  @Patch(':id')
+  async updateTodo(
+    @Param('id') id: string,
+    @Body() body: unknown,
+  ): Promise<TaskResponse> {
+    try {
+      const parsed = UpdateTaskSchema.parse(body);
+      return this.todoService.updateById(id, parsed);
+    } catch (error) {
+      if (error instanceof ZodError) {
+        throw new BadRequestException(
+          error.issues.map((err) => ({
+            field: err.path.join('.'),
+            message: err.message,
+          })),
+        );
+      }
+      throw error;
+    }
+  }
+
+  @Delete(':id')
+  async deleteTodoById(@Param('id') id: string): Promise<TaskResponse> {
+    return this.todoService.deleteById(id);
+  }
+}
