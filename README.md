@@ -1,98 +1,270 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Todo App API
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A simple REST API for managing a to-do list, built with **NestJS**, **MongoDB**, and **TypeScript**.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+> **Heads up:** Despite the repo name, this is a **NestJS** backend — not a Next.js frontend.
 
-## Description
+---
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Table of Contents
 
-## Project setup
+- [What Does This Project Do?](#what-does-this-project-do)
+- [Tech Stack](#tech-stack)
+- [Prerequisites](#prerequisites)
+- [Getting Started](#getting-started)
+- [Environment Variables](#environment-variables)
+- [Running the App](#running-the-app)
+- [API Endpoints](#api-endpoints)
+- [Postman Collection](#postman-collection)
+- [Running Tests](#running-tests)
+- [Project Structure](#project-structure)
+- [Common Issues](#common-issues)
+
+---
+
+## What Does This Project Do?
+
+This is a backend API that lets you **create**, **read**, **update**, and **delete** tasks (todos). You can also filter tasks by completion status and view completed tasks grouped by date.
+
+There is **no frontend** — you interact with it through tools like [Postman](https://www.postman.com/), [Insomnia](https://insomnia.rest/), or plain `curl` in your terminal.
+
+**Want to skip manual setup?** [Join the Postman team](https://app.getpostman.com/join-team?invite_code=392eca137de98a4d433adffc054ccb7b948f5b77371f81b860f7f429e4926ecf&target_code=adce931d712efce4f4ab8bce7af80849) to get a ready-made collection with all the API requests pre-configured.
+
+There is **no authentication** — all endpoints are open and public.
+
+---
+
+## Tech Stack
+
+| Tool | What It Does |
+|------|-------------|
+| [NestJS](https://nestjs.com/) | The web framework that handles requests and responses |
+| [TypeScript](https://www.typescriptlang.org/) | Adds type safety on top of JavaScript |
+| [MongoDB](https://www.mongodb.com/) | The database where tasks are stored |
+| [Mongoose](https://mongoosejs.com/) | Talks to MongoDB from the app |
+| [Zod](https://zod.dev/) | Validates incoming data (e.g. making sure a title isn't empty) |
+
+---
+
+## Prerequisites
+
+Before you start, make sure you have these installed on your machine:
+
+1. **Node.js** (v18 or higher) — [Download here](https://nodejs.org/)
+   - Check with: `node -v`
+2. **npm** (comes with Node.js)
+   - Check with: `npm -v`
+3. **MongoDB** — you need a running MongoDB instance. Pick one:
+   - **Option A (easiest):** Create a free cloud database at [MongoDB Atlas](https://www.mongodb.com/atlas)
+   - **Option B:** Install MongoDB locally — [Instructions](https://www.mongodb.com/docs/manual/installation/)
+   - **Option C:** Run MongoDB in Docker — `docker run -d -p 27017:27017 --name mongo mongo:latest`
+
+---
+
+## Getting Started
+
+### 1. Clone the repository
 
 ```bash
-$ npm install
+git clone <your-repo-url>
+cd NextJS-Todo-App
 ```
 
-## Compile and run the project
+### 2. Install dependencies
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm install
 ```
 
-## Run tests
+### 3. Set up environment variables
+
+Copy the example file and fill in your values:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+cp .env.example .env
 ```
 
-## Deployment
+Then open `.env` in your editor and set your MongoDB connection string (see [Environment Variables](#environment-variables) below).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
-
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+### 4. Start the app
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+npm run start:dev
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+If everything worked, you should see output like:
 
-## Resources
+```
+[Nest] LOG [NestApplication] Nest application successfully started
+```
 
-Check out a few resources that may come in handy when working with NestJS:
+The app is now running at **http://localhost:3000**.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### 5. Test it out
 
-## Support
+Open your browser and go to `http://localhost:3000` — you should see `Hello World!`.
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+---
 
-## Stay in touch
+## Environment Variables
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+| Variable | Required? | Default | Description |
+|----------|-----------|---------|-------------|
+| `MONGODB_URI` | **Yes** | — | Your MongoDB connection string |
+| `PORT` | No | `3000` | The port the app runs on |
+
+### Example values for `MONGODB_URI`
+
+- **MongoDB Atlas (cloud):** `mongodb+srv://username:password@cluster0.xxxxx.mongodb.net/todo-app`
+- **Local MongoDB:** `mongodb://localhost:27017/todo-app`
+- **Docker MongoDB:** `mongodb://localhost:27017/todo-app`
+
+---
+
+## Running the App
+
+| Command | What It Does |
+|---------|-------------|
+| `npm run start` | Starts the app once (no auto-reload) |
+| `npm run start:dev` | Starts the app with auto-reload on file changes (use this for development) |
+| `npm run start:debug` | Same as dev mode but with Node.js debugger attached |
+| `npm run start:prod` | Runs the compiled production build from `dist/` |
+| `npm run build` | Compiles TypeScript to JavaScript in the `dist/` folder |
+
+---
+
+## API Endpoints
+
+The base URL is `http://localhost:3000` (unless you changed the `PORT`).
+
+### Health Check
+
+| Method | URL | What It Does |
+|--------|-----|-------------|
+| `GET` | `/` | Returns `"Hello World!"` — use this to check if the server is running |
+
+### Tasks
+
+All task endpoints live under `/api/tasks`.
+
+| Method | URL | What It Does |
+|--------|-----|-------------|
+| `GET` | `/api/tasks` | Get all tasks |
+| `GET` | `/api/tasks?done=true` | Get only completed tasks |
+| `GET` | `/api/tasks?done=false` | Get only incomplete tasks |
+| `GET` | `/api/tasks/completed` | Get completed tasks grouped by date |
+| `GET` | `/api/tasks/:id` | Get a single task by its ID |
+| `POST` | `/api/tasks` | Create a new task |
+| `PATCH` | `/api/tasks/:id` | Update a task (e.g. mark as done) |
+| `DELETE` | `/api/tasks/:id` | Delete a task |
+
+### Postman Collection
+
+Don't want to type out requests manually? Join the Postman team to get a pre-built collection with every endpoint ready to go:
+
+[Get the Postman Collection](https://app.getpostman.com/join-team?invite_code=392eca137de98a4d433adffc054ccb7b948f5b77371f81b860f7f429e4926ecf&target_code=adce931d712efce4f4ab8bce7af80849)
+
+### Request & Response Examples
+
+**Create a task:**
+
+```bash
+curl -X POST http://localhost:3000/api/tasks \
+  -H "Content-Type: application/json" \
+  -d '{"title": "Buy groceries"}'
+```
+
+Response:
+
+```json
+{
+  "id": "64a1b2c3d4e5f6a7b8c9d0e1",
+  "title": "Buy groceries",
+  "done": false,
+  "createdAt": "2025-07-01T12:00:00.000Z",
+  "completedAt": null
+}
+```
+
+**Mark a task as done:**
+
+```bash
+curl -X PATCH http://localhost:3000/api/tasks/64a1b2c3d4e5f6a7b8c9d0e1 \
+  -H "Content-Type: application/json" \
+  -d '{"done": true}'
+```
+
+**Delete a task:**
+
+```bash
+curl -X DELETE http://localhost:3000/api/tasks/64a1b2c3d4e5f6a7b8c9d0e1
+```
+
+---
+
+## Running Tests
+
+| Command | What It Does |
+|---------|-------------|
+| `npm run test` | Run unit tests |
+| `npm run test:watch` | Run tests and re-run on file changes |
+| `npm run test:cov` | Run tests and generate a coverage report |
+| `npm run test:e2e` | Run end-to-end tests (requires `MONGODB_URI` to be set) |
+
+---
+
+## Project Structure
+
+```
+src/
+├── main.ts                          # App entry point — starts the server
+├── app.module.ts                    # Root module — wires everything together
+├── app.controller.ts                # Handles GET / (health check)
+├── app.service.ts                   # Business logic for the root route
+│
+├── todos/
+│   ├── todos.module.ts              # Wires up the todos feature
+│   ├── todos.controller.ts          # Handles HTTP requests for /api/tasks
+│   ├── todos.service.ts             # Business logic for tasks (DB queries)
+│   └── schemas/
+│       ├── todo.schema.ts           # Mongoose schema (what a task looks like in MongoDB)
+│       └── todo.zod.ts              # Zod schemas (input validation rules)
+│
+└── zod-validation/
+    └── zod-validation.pipe.ts       # Custom validation pipe
+```
+
+---
+
+## Other Commands
+
+| Command | What It Does |
+|---------|-------------|
+| `npm run format` | Auto-format code with Prettier |
+| `npm run lint` | Lint code with ESLint and auto-fix issues |
+
+---
+
+## Common Issues
+
+### "Cannot connect to MongoDB" / App crashes on startup
+
+- Make sure MongoDB is running
+- Double-check your `MONGODB_URI` in the `.env` file
+- If using Atlas, make sure your IP address is whitelisted in the Atlas dashboard
+
+### "Port 3000 is already in use"
+
+Something else is using port 3000. Either:
+- Stop the other process, or
+- Change the `PORT` in your `.env` file to something else (e.g. `3001`)
+
+### "Module not found" errors
+
+Run `npm install` again — you might be missing dependencies.
+
+---
 
 ## License
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+This project uses the [MIT License](https://opensource.org/licenses/MIT).

@@ -13,7 +13,7 @@ import { ZodValidationPipe } from 'nestjs-zod';
       envFilePath: '.env',
       isGlobal: true,
     }),
-    MongooseModule.forRoot(process.env.DB_URL!),
+    MongooseModule.forRoot(process.env.MONGODB_URI!),
     TodosModule,
   ],
   controllers: [AppController],
