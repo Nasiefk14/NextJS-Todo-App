@@ -154,7 +154,7 @@ All task endpoints live under `/api/tasks`.
 | `GET` | `/api/tasks/completed` | Get completed tasks grouped by date |
 | `GET` | `/api/tasks/:id` | Get a single task by its ID |
 | `POST` | `/api/tasks` | Create a new task |
-| `PATCH` | `/api/tasks/:id` | Update a task (e.g. mark as done) |
+| `PATCH` | `/api/tasks/:id` | Update a task |
 | `DELETE` | `/api/tasks/:id` | Delete a task |
 
 ### Postman Collection
@@ -193,11 +193,23 @@ curl -X PATCH http://localhost:3000/api/tasks/64a1b2c3d4e5f6a7b8c9d0e1 \
   -d '{"done": true}'
 ```
 
+**Undo a completion (mark as not done):**
+
+```bash
+curl -X PATCH http://localhost:3000/api/tasks/64a1b2c3d4e5f6a7b8c9d0e1 \
+  -H "Content-Type: application/json" \
+  -d '{"done": false}'
+```
+
+This clears the `completedAt` date and moves the task back to incomplete.
+
 **Delete a task:**
 
 ```bash
 curl -X DELETE http://localhost:3000/api/tasks/64a1b2c3d4e5f6a7b8c9d0e1
 ```
+
+Returns `204 No Content` on success, `404 Not Found` if the task doesn't exist.
 
 ---
 

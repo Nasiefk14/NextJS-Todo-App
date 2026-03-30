@@ -75,12 +75,12 @@ export class TodosService {
   }
 
   async updateById(id: string, todo: UpdateTaskDto): Promise<TaskResponse> {
-    let completedAt: Date | undefined;
+    let completedAt: Date | null;
 
     if (todo.done) {
       completedAt = todo.completedAt ? new Date(todo.completedAt) : new Date();
     } else {
-      completedAt = undefined;
+      completedAt = null;
     }
     
     const updateData: Partial<Task> = {
