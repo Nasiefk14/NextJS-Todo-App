@@ -15,6 +15,13 @@ export class TodosService {
     private todoModel: mongoose.Model<Task>,
   ) {}
 
+  private checkIfFound(task: Task | null, id: string): Task {
+    if (!task) {
+      throw new NotFoundException(`Task with id ${id} not found`);
+    }
+    return task;
+  }
+
   private mapData(task: Task): TaskResponse {
     return {
       id: task._id.toString(),
@@ -55,12 +62,10 @@ export class TodosService {
   }
 
   async findById(id: string): Promise<TaskResponse> {
-    const res: Task | null = await this.todoModel.findById(id);
-    if (!res) {
-      throw new NotFoundException(`Task with id ${id} not found`);
-    }
+    const res = await this.todoModel.findById(id);
+    this.checkIfFound(res, id);
 
-    return this.mapData(res);
+    return this.mapData(res!);
   }
 
   async create(todo: CreateTaskDto): Promise<TaskResponse> {
@@ -88,23 +93,19 @@ export class TodosService {
       completedAt,
     };
 
-    const res: Task | null= await this.todoModel.findByIdAndUpdate(id, updateData, {
+    const res = await this.todoModel.findByIdAndUpdate(id, updateData, {
       new: true,
       runValidators: true,
     });
-    if (!res) {
-      throw new NotFoundException(`Task with id ${id} not found`);
-    }
+    this.checkIfFound(res, id);
 
-    return this.mapData(res);
+    return this.mapData(res!);
   }
 
   async deleteById(id: string): Promise<TaskResponse> {
-    const res: Task | null = await this.todoModel.findByIdAndDelete(id);
-    if (!res) {
-      throw new NotFoundException(`Task with id ${id} not found`);
-    }
+    const res = await this.todoModel.findByIdAndDelete(id);
+    this.checkIfFound(res, id);
 
-    return this.mapData(res);
+    return this.mapData(res!);
   }
 }
