@@ -4,6 +4,7 @@ import {
   Controller,
   Delete,
   Get,
+  HttpCode,
   Param,
   Patch,
   Post,
@@ -83,7 +84,8 @@ export class TodosController {
   }
 
   @Delete(':id')
-  async deleteTodoById(@Param('id') id: string): Promise<TaskResponse> {
-    return this.todoService.deleteById(id);
+  @HttpCode(204)
+  async deleteTodoById(@Param('id') id: string): Promise<void> {
+    await this.todoService.deleteById(id);
   }
 }
